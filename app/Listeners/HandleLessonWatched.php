@@ -37,28 +37,27 @@ class HandleLessonWatched
 
         // Assign Achievements depending on watchTimes
         switch ($watchTimes){
-            case 1;
-            event(new AchievementUnlocked("First Lesson Watched",$user));
+            case 1:
+                event(new AchievementUnlocked("First Lesson Watched",$user));
             break;
 
-            case 5;
-            event(new AchievementUnlocked("5 Lessons Watched",$user));
+            case 5:
+                event(new AchievementUnlocked("5 Lessons Watched",$user));
             break;
 
-            case 10;
-            event(new AchievementUnlocked("10 Lessons Watched",$user));
+            case 10:
+                event(new AchievementUnlocked("10 Lessons Watched",$user));
             break;
 
-            case  $watchTimes >= 25 && $watchTimes < 50;
-            event(new AchievementUnlocked("25 Lessons Watched",$user));
+            case 25:
+                event(new AchievementUnlocked("25 Lessons Watched",$user));
             break;
 
-            case  $watchTimes >= 50;
-            event(new AchievementUnlocked("50 Lessons Watched",$user));
+            case 50:
+                event(new AchievementUnlocked("50 Lessons Watched",$user));
             break;
 
-            default;
-            break;
+          
       
         }
      }

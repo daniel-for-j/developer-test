@@ -28,24 +28,24 @@ class HandleCommentWritten
 
     
         switch ($numberOfComments){
-            case $numberOfComments >= 1 && $numberOfComments < 3;
-            event(new AchievementUnlocked("First Comment Written",$user));
+            case 1:
+                event(new AchievementUnlocked("First Comment Written",$user));
             break;
 
-            case $numberOfComments >= 3 && $numberOfComments < 5;
-            event(new AchievementUnlocked("3 Comments Written",$user));
+            case 3:
+                event(new AchievementUnlocked("3 Comments Written",$user));
             break;
 
-            case  $numberOfComments >= 5 && $numberOfComments < 10;
-            event(new AchievementUnlocked("5 Comments Written",$user));
+            case 5:
+                event(new AchievementUnlocked("5 Comments Written",$user));
             break;
 
-            case  $numberOfComments >= 10 && $numberOfComments < 20;
-            event(new AchievementUnlocked("10 Comments Written",$user));
+            case 10:
+                event(new AchievementUnlocked("10 Comments Written",$user));
             break;
 
-            case  $numberOfComments >= 20;
-            event(new AchievementUnlocked("20 Comments Written",$user));
+            case 20:
+                event(new AchievementUnlocked("20 Comments Written",$user));
             break;
 
             default;
