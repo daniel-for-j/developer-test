@@ -15,11 +15,11 @@ use Illuminate\Http\Request;
 
 class AchievementsController extends Controller
 {
-    public function index( $user)
+    public function index(User $user)
     {
         
 
-        $userId = 1;
+        $userId = $user->id;
 
 
         // All Unlocked Achievements
@@ -83,26 +83,4 @@ class AchievementsController extends Controller
         ]);
     }
 
-
-    public function watch(){
-
-    
-        // Lesson
-        $lesson = Lesson::find(1);
-
-        // User
-        $user = User::find(1);
-
-        event(new LessonWatched($lesson,$user));
-
-    }
-
-    public function comment(){
-        $comment = new Comment;
-        $comment->body = "We gather dey";
-        $comment->user_id = 1;
-        $comment->save();
-
-        event(new CommentWritten($comment));
-    }
 }
