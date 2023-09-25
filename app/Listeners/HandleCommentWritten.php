@@ -4,6 +4,7 @@ namespace App\Listeners;
 
 use App\Models\User;
 use App\Models\Comment;
+use App\Events\AchievementUnlocked;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
@@ -19,8 +20,15 @@ class HandleCommentWritten
         
     $comment = $event->comment;
 
-    $user = User::where('user_id',$comment->user_id)->first();
+    $user = User::where('id',$comment->user_id)->first();
 
+// This can be uncommented if comment is not saved before triggering event 
+    // $newComment = new Comment;
+    // $newComment->body = $comment;
+    // $newComment->user_id = $user->id;
+    // $result = $newComment->save();
+
+ 
     // All comments that belong to the user
     $comments = Comment::where('user_id', $comment->user_id)->get();
 
@@ -52,6 +60,7 @@ class HandleCommentWritten
             break;
       
         }
-    
     }
+
 }
+

@@ -3,34 +3,50 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\UserAchievement;
 use App\Models\Achievement;
+use App\Models\UserBadge;
 use App\Models\Badge;
+use App\Models\Lesson;
+use App\Models\Comment;
+use App\Events\LessonWatched;
+use App\Events\CommentWritten;
 use Illuminate\Http\Request;
 
 class AchievementsController extends Controller
 {
-    public function index(User $user)
+    public function index( $user)
     {
+        
 
-        $userId = $user->id;
+        $userId = 1;
+
+
         // All Unlocked Achievements
         $achievementsByName = [];
-        $unlockedAchievements = Achievement::where('user_id',$userId)->get();
+        $unlockedAchievements = UserAchievement::where('user_id',$userId)->get();
         foreach($unlockedAchievements as $achievemnt){
             array_push($achievementsByName,$achievemnt->title);
         }
 
         // Next achievements
-        $allAchievements = ["First Lesson Watched", "5 Lessons Watched", "10 Lessons Watched", "25 Lessons Watched", "50 Lessons Watched", "First Comment Written", "3 Comments Written", "5 Comments Written", "10 Comments Written", "20 Comments Written"];
+        $achievemnts = Achievement::all();
+        $allAchievements = [];
+        // Pushes all achievement titles into empty array
+        foreach($achievemnts as $achievemnt){
+            array_push($allAchievements, $achievemnt->title);
+        }
+        // Subtracts unlocked achievements from total achievements
         $nextAchievements = array_diff($allAchievements,$achievementsByName);
-
-
-        // Current Badge
-        $currentBadge = Badge::where('user_id',$userId)->first();
+        $readableNextAchievements ="[" . implode(", ", $nextAchievements) . "]";
 
 
 
-        // Next Badge
+        // Current UserBadge
+        $currentBadge = UserBadge::where('user_id',$userId)->first();
+
+
+        // Next UserBadge
         $nextBadge;
         switch($currentBadge->current_badge){
             case 'Beginner':
@@ -46,24 +62,47 @@ class AchievementsController extends Controller
             break;
 
             case 'Master':
-                $nextBadge = 'You are at the current highest Badge obtainable';
+                $nextBadge = 'You are at the current highest UserBadge obtainable';
             break;
 
 
         }
 
         // Number of achievements left to unlock
-        $noOfAchievementsLeft = count($nextAchievements); 
-        $remainingToUnlockNextBadge= $currentBadge->achievements_needed - $unlockedAchievements; 
+        $currentBadgeNumber = Badge::where('title', $nextBadge)->first();
+        $remainingToUnlockNextBadge= $currentBadgeNumber->achievements_needed - count($unlockedAchievements); 
 
 
 
         return response()->json([
             'unlocked_achievements' => $achievementsByName,
-            'next_available_achievements' => $nextAchievements,
+            'next_available_achievements' => $readableNextAchievements,
             'current_badge' => $currentBadge->current_badge,
             'next_badge' => $nextBadge,
             'remaing_to_unlock_next_badge' => $remainingToUnlockNextBadge
         ]);
+    }
+
+
+    public function watch(){
+
+    
+        // Lesson
+        $lesson = Lesson::find(1);
+
+        // User
+        $user = User::find(1);
+
+        event(new LessonWatched($lesson,$user));
+
+    }
+
+    public function comment(){
+        $comment = new Comment;
+        $comment->body = "We gather dey";
+        $comment->user_id = 1;
+        $comment->save();
+
+        event(new CommentWritten($comment));
     }
 }

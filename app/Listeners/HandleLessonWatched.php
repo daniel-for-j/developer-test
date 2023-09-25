@@ -27,6 +27,7 @@ class HandleLessonWatched
      $user = $event->user;
      $lessonUser = LessonUser::where('user_id',$user->id)->first();
 
+
     //  Increments the watch column on the DB
      $lessonUser->watched += 1;
      $result = $lessonUser->save();
